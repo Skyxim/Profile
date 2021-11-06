@@ -1,6 +1,8 @@
 #!name=Block YouTube Advertising
-#!desc=仅用于视频广告，不适用允许 UDP 转发的节点及 Premium。
+#!desc=以屏蔽YouTube的UDP
 #!system=ios
+
+
 [Rule]
 AND,((PROTOCOL,UDP),(RULE-SET,https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/YouTube/YouTube.list)),REJECT
 
