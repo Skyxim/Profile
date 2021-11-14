@@ -8,7 +8,9 @@ AND,((PROTOCOL,UDP),(RULE-SET,https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_
 
 [URL Rewrite]
 (^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+)&ctier=L(&.+) $1&ctier=A$2 header
-^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad - reject
+#^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad - reject
+
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback).+)&ip=(.+)(&.+) $1&ip=202.133.207.46$3 header
 
 ^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads - reject
 ^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking) - reject
