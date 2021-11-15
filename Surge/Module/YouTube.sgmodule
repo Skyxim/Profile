@@ -3,11 +3,10 @@
 
 
 [URL Rewrite]
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback)).+)&ip=.+?(&.*) $1&ip=223.5.5.5$3 header
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+)&ip=.+?(&ctier=[A-Z].+) $1&ip=223.5.5.5$2 header
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+)(&ctier=[A-Z].+?)&ip=.+?(&?.*) $1$2&ip=223.5.5.5$3 header
-
-
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(videoplayback)).+)&ip=.+?(&.*) $1&ip=223.5.5.5$2 header
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(videoplayback)).+)\/ip\/.+?(\/.*) $1/ip/223.5.5.5$2 header
+(^https?:\/\/[\w-]+\.googlevideo\.com\/.+)\/ip\/.+?(\/.+\/ctier\/[A-Z])(.+) $1/ip/223.5.5.5$2$3 header
+(^https?:\/\/[\w-]+\.googlevideo\.com\/.+)&ip=.+?(&.+&ctier=[A-Z])(.+) $1&ip=223.5.5.5$2$3 header
 
 ^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads - reject
 ^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking) - reject
