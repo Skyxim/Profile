@@ -1,5 +1,5 @@
 #!name=YouTube Ad
-#!desc=需要不支持udp节点，或者添加规则  AND,((DEST-PORT,443),(PROTOCOL,UDP)),REJECT
+#!desc=修改IP送中去广告，会影响评论等功能,需要不支持UDP节点，或者添加规则  AND,((DEST-PORT,443),(PROTOCOL,UDP)),REJECT
 
 
 [URL Rewrite]
