@@ -1,14 +1,13 @@
-#!name=Block YouTube Advertising
-#!desc=以屏蔽YouTube的UDP
-#!system=ios
+#!name=YouTube Ad
+#!desc=需要不支持udp节点，或者添加规则  AND,((DEST-PORT,443),(PROTOCOL,UDP)),REJECT
 
-
-[Rule]
-AND,((PROTOCOL,UDP),(RULE-SET,https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/YouTube/YouTube.list)),REJECT
 
 [URL Rewrite]
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+)&ctier=L(&.+) $1&ctier=A$2 header
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback).+))&ip=(.+)(&.+) $1&ip=223.5.5.5$3 header
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback)).+)&ip=.+?(&.*) $1&ip=223.5.5.5$3 header
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+)&ip=.+?(&ctier=[A-Z].+) $1&ip=223.5.5.5$2 header
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+)(&ctier=[A-Z].+?)&ip=.+?(&?.*) $1$2&ip=223.5.5.5$3 header
+
+
 
 ^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads - reject
 ^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking) - reject
