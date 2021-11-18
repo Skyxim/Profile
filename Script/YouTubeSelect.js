@@ -73,7 +73,7 @@ function clearCache() {
 function selectProxy(subProxy) {
     setPolicy(youtubeGroup, subProxy)
     try {
-        let region = await Promise.race([test(), timeout(3000)])
+        let region = await Promise.race([test(subProxy), timeout(3000)])
         console.log(region)
         if (region === needRegion) {
             subPolicyCache.set(subProxy, { region: needRegion, timestamp: (new Date()).valueOf() })
@@ -88,7 +88,7 @@ function selectProxy(subProxy) {
     return false
 }
 
-function test() {
+function test(nodeName) {
     return new Promise((resolve, reject) => {
         let option = {
             url: BASE_URL,
@@ -96,6 +96,7 @@ function test() {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
                 'Accept-Language': 'en',
             },
+            node:nodeName
         }
         $httpClient.get(option, function (error, response, data) {
             if (error != null || response.status !== 200) {
