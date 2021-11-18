@@ -7,7 +7,7 @@
         {
             "id":"youtube",
             "name":"YouTube",
-            "keys":["@yotube.policy","@youtube.need.region"],
+            "keys":["@yotube.policy","@youtube.region"],
             "repo":"https://github.com/Skyxim/Profile",
 	        "script":"https://github.com/Skyxim/Profile/raw/main/Script/YouTubeSelect.js",
             "settings":[
