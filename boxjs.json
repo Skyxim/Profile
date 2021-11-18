@@ -1,0 +1,35 @@
+{
+    "id":"skyxim",
+    "name":"Skyxim",
+    "author":"@Skyxim",
+    "repo":"https://github.com/Skyxim/my-rule",
+    "apps":[
+        {
+            "id":"youtube",
+            "name":"YouTube",
+            "keys":["@yotube.policy","@youtube.need.region"],
+            "repo":"https://github.com/Skyxim/Profile",
+	        "script":"https://github.com/Skyxim/Profile/raw/main/Script/YouTubeSelect.js",
+            "settings":[
+                {
+                    "id":"@yotube.policy",
+                    "name":"YouTube策略组",
+					"val": "YouTube",
+                    "type":"textarea",
+                    "placeholder":"YouTube的策略组名，需要是select类型",
+                    "autoGrow": true,
+					"rows": 1
+                },
+                {
+                    "id":"@youtube.need.region",
+					"val": "CN",
+                    "name":"所需地区",
+                    "type":"textarea",
+                    "placeholder":"需要选择的地区",
+                    "autoGrow": true,
+					"rows": 1
+                }
+            ]
+        }
+    ]
+}

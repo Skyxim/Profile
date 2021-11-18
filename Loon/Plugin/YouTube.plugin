@@ -1,12 +1,4 @@
-[URL Rewrite]
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(videoplayback|dclk_video_ads)).+)&ip=.+?(&.*) $1&ip=202.133.207.46$3 header
-(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(videoplayback|dclk_video_ads)).+)\/ip\/.+?(\/.*) $1/ip/202.133.207.46$3 header
-(^https?:\/\/[\w-]+\.googlevideo\.com\/.+)\/ip\/.+?(\/.+\/ctier\/[A-Z])(.+) $1/ip/202.133.207.46$2$3 header
-(^https?:\/\/[\w-]+\.googlevideo\.com\/.+)&ip=.+?(&.+&ctier=[A-Z])(.+) $1&ip=202.133.207.46$2$3 header
+# 选择YouTube地区，可以通过选择CN达到去广告效果
 
-
-^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads  reject
-^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking)  reject
-^https?:\/\/\s.youtube.com/api/stats/qoe?.*adformat=  reject
-[MITM]
-hostname = *.googlevideo.com,www.youtube.com,s.youtube.com
+[Script]
+YouTubeCronSelect = type=cron,cronexp=5 * * * *,control-api=1,script-path=https://github.com/Skyxim/Profile/raw/main/Script/YouTubeSelect.js
