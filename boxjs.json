@@ -2,17 +2,17 @@
     "id":"skyxim",
     "name":"Skyxim",
     "author":"@Skyxim",
-    "repo":"https://github.com/Skyxim/my-rule",
+    "repo":"https://github.com/Skyxim/Profile",
     "apps":[
         {
             "id":"youtube",
             "name":"YouTube",
-            "keys":["@yotube.policy","@youtube.need.region"],
+            "keys":["@youtube.policy","@youtube.region"],
             "repo":"https://github.com/Skyxim/Profile",
 	        "script":"https://github.com/Skyxim/Profile/raw/main/Script/YouTubeSelect.js",
             "settings":[
                 {
-                    "id":"@yotube.policy",
+                    "id":"@youtube.policy",
                     "name":"YouTube策略组",
 					"val": "YouTube",
                     "type":"textarea",
@@ -21,7 +21,7 @@
 					"rows": 1
                 },
                 {
-                    "id":"@youtube.need.region",
+                    "id":"@youtube.region",
 					"val": "CN",
                     "name":"所需地区",
                     "type":"textarea",
