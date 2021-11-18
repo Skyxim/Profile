@@ -21,7 +21,7 @@
 					"rows": 1
                 },
                 {
-                    "id":"@youtube.need.region",
+                    "id":"@youtube.region",
 					"val": "CN",
                     "name":"所需地区",
                     "type":"textarea",
