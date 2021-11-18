@@ -12,7 +12,7 @@
 	        "script":"https://github.com/Skyxim/Profile/raw/main/Script/YouTubeSelect.js",
             "settings":[
                 {
-                    "id":"@yotube.policy",
+                    "id":"@youtube.policy",
                     "name":"YouTube策略组",
 					"val": "YouTube",
                     "type":"textarea",
