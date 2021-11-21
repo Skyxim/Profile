@@ -1,4 +1,3 @@
-
 const isLoon = typeof $loon !== "undefined";
 const isSurge = typeof $httpClient !== "undefined" && !isLoon;
 const $ = Cache()
@@ -6,12 +5,14 @@ const $ = Cache()
 const BASE_URL = "https://www.youtube.com/premium"
 let config = {
     region: "CN",
-    policy: "YouTube"
+    policy: "YouTube",
+    cache: {}
 }
 
 let boxConfig = $.read("youtube")
 if (boxConfig != "" && typeof boxConfig != "undefined") {
-    config = JSON.parse(boxConfig)
+    console.log(boxConfig)
+     config = JSON.parse(boxConfig)
 }
 
 const needRegion = config.region
@@ -19,9 +20,13 @@ const needRegion = config.region
 let youtubeGroup = config.policy
 let otherSubProxies = []
 var oldSubPolicy = ""
-let subPolicyCache = new Map(Object.entries(config.cache === undefined ? {} : config.cache))
-console.log(subPolicyCache)
-let preSatisfactionProxies = []
+let subPolicyCache = new Map()
+Object.entries(config.cache).forEach((item)=>{
+subPolicyCache.set(item[0],item[1])
+})
+
+console.log(subPolicyCache.size)
+ let preSatisfactionProxies = []
 
     ; (async () => {
         let subProxies = []
@@ -89,7 +94,7 @@ function handleCache() {
 
     for (const [key, value] of subPolicyCache) {
         console.log(value.region + " " + value.timestamp)
-        console.log(now)
+        
         if (value.region !== needRegion || now - value.timestamp > 30 * 60 * 60 * 24) {
             subPolicyCache.delete(key)
         }
@@ -103,7 +108,7 @@ async function selectProxy(subProxy) {
     setPolicy(youtubeGroup, subProxy)
     try {
         let region = await Promise.race([test(subProxy), timeout(3000)])
-        console.log(region)
+        
         if (region === needRegion) {
             subPolicyCache.set(subProxy, { region: needRegion, timestamp: (new Date()).valueOf() })
             return true
@@ -134,8 +139,7 @@ function test(nodeName) {
                 return
             }
 
-            let region = getRegion(data);
-            console.log(region)
+            let region = getRegion(data)
 
             resolve(region.toUpperCase())
         })
