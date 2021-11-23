@@ -1,3 +1,4 @@
+
 const isLoon = typeof $loon !== "undefined";
 const isSurge = typeof $httpClient !== "undefined" && !isLoon;
 const $ = Cache()
@@ -12,30 +13,21 @@ let config = {
 let boxConfig = $.read("youtube")
 if (boxConfig != "" && typeof boxConfig != "undefined") {
     console.log(boxConfig)
-     config = JSON.parse(boxConfig)
+    config = JSON.parse(boxConfig)
 }
 
 const needRegion = config.region
 // let params = getParams($argument)
 let youtubeGroup = config.policy
 let otherSubProxies = []
-var oldSubPolicy = ""
-let subPolicyCache = new Map()
-Object.entries(config.cache).forEach((item)=>{
-subPolicyCache.set(item[0],item[1])
-})
+let subPolicyCache = new Map(Object.entries(config.cache))
 
 console.log(subPolicyCache.size)
- let preSatisfactionProxies = []
+let preSatisfactionProxies = []
 
     ; (async () => {
-        let subProxies = []
-        if (isLoon) {
-            subProxies = $config.getSubPolicys(youtubeGroup)
-        } else if (isSurge) {
-            subProxies = (await httpAPI("/v1/policy_groups"))[youtubeGroup];
-            oldSubPolicy = (await httpAPI("/v1/policy_groups/select?group_name=" + encodeURIComponent(youtubeGroup) + "")).policy;
-        }
+        let subProxies = await getSubPolicy(youtubeGroup)
+        let oldSubPolicy = await getNowSelectPolicy(youtubeGroup)
 
         let nowIndex = 0
         for (var key in subProxies) {
@@ -60,7 +52,7 @@ console.log(subPolicyCache.size)
                 handleCache()
                 $done({
                     title: "YouTube Selected",
-                    content: "当前节点 " + needRegion.toUpperCase() + " :" + proxy
+                    content: "当前节点:" + needRegion.toUpperCase() + " :" + proxy
                 })
                 return
             }
@@ -72,7 +64,7 @@ console.log(subPolicyCache.size)
                 handleCache()
                 $done({
                     title: "YouTube Selected",
-                    content: "当前节点 " + needRegion.toUpperCase() + " :" + proxy
+                    content: "当前节点:" + needRegion.toUpperCase() + " :" + proxy
                 })
                 return
             }
@@ -84,7 +76,7 @@ console.log(subPolicyCache.size)
         handleCache()
         $done({
             title: "YouTube Selected",
-            content: "当前节点：" + oldSubPolicy
+            content: "当前节点:" + oldSubPolicy
         })
 
     })()
@@ -94,7 +86,7 @@ function handleCache() {
 
     for (const [key, value] of subPolicyCache) {
         console.log(value.region + " " + value.timestamp)
-        
+
         if (value.region !== needRegion || now - value.timestamp > 30 * 60 * 60 * 24) {
             subPolicyCache.delete(key)
         }
@@ -108,13 +100,13 @@ async function selectProxy(subProxy) {
     setPolicy(youtubeGroup, subProxy)
     try {
         let region = await Promise.race([test(subProxy), timeout(3000)])
-        
+
         if (region === needRegion) {
             subPolicyCache.set(subProxy, { region: needRegion, timestamp: (new Date()).valueOf() })
             return true
         }
 
-        console.log("skip" + subProxy)
+        console.log("skip->" + subProxy)
     } catch (error) {
         console.log(error)
     }
@@ -204,4 +196,26 @@ function Cache() {
             }
         }
     }
+}
+
+async function getSubPolicy(policy) {
+    if (isSurge) {
+        return (await httpAPI("/v1/policy_groups"))[policy];
+    } else if (isLoon) {
+        return (new Promise((resolve) => {
+            $config.getSubPolicys(policy, function (str) {
+                resolve(JSON.parse(str))
+            })
+        }))
+    }
+}
+
+
+async function getNowSelectPolicy(policy) {
+    if (isSurge) {
+        return (await httpAPI("/v1/policy_groups/select?group_name=" + encodeURIComponent(policy) + "")).policy
+    } else if (isLoon) {
+        return (new Map(Object.entries(JSON.parse($config.getConfig()).policy_select))).get(policy)
+    }
+
 }
