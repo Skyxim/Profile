@@ -1,9 +1,12 @@
-  - 'dns.google.com'
-  - 'dns.google'
-  - 'one.one.one.one'
-  - 'doh.opendns.com'
-  - 'doh.familyshield.opendns.com'
-  - 'dns.adguard.com'
-  - 'dns-family.adguard.com'
-  - 'dns-unfiltered.adguard.com'
-  - 'doh.dns.apple.com'
+dns.google
+one.one.one.one
+doh.opendns.com
+doh.familyshield.opendns.com
+dns.adguard.com
+dns-family.adguard.com
+dns-unfiltered.adguard.com
+doh.dns.apple.com
+1.1.1.1
+1.0.0.1
+8.8.8.8
+8.8.4.4
