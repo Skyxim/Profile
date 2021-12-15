@@ -23,7 +23,6 @@ const needRegion = config.region
 // let params = getParams($argument)
 let youtubeGroup = config.policy
 let otherSubProxies = []
-
 let subPolicyCache = new Map(Object.entries(config.cache))
 
 console.log(subPolicyCache.size)
@@ -57,7 +56,7 @@ let preSatisfactionProxies = []
                 handleCache()
                 $done({
                     title: "YouTube Selected",
-                    content: "当前节点 " + needRegion.toUpperCase() + " :" + proxy
+                    content: "当前节点:" + needRegion.toUpperCase() + " :" + proxy
                 })
                 return
             }
@@ -69,7 +68,7 @@ let preSatisfactionProxies = []
                 handleCache()
                 $done({
                     title: "YouTube Selected",
-                    content: "当前节点 " + needRegion.toUpperCase() + " :" + proxy
+                    content: "当前节点:" + needRegion.toUpperCase() + " :" + proxy
                 })
                 return
             }
@@ -81,7 +80,7 @@ let preSatisfactionProxies = []
         handleCache()
         $done({
             title: "YouTube Selected",
-            content: "当前节点：" + oldSubPolicy
+            content: "当前节点:" + oldSubPolicy
         })
 
     })()
@@ -109,7 +108,7 @@ async function selectProxy(subProxy) {
             return true
         }
 
-        console.log("skip" + subProxy)
+        console.log("skip->" + subProxy)
     } catch (error) {
         console.log(error)
     }
