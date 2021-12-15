@@ -6,40 +6,42 @@ const $ = Cache()
 const BASE_URL = "https://www.youtube.com/premium"
 let config = {
     region: "CN",
-    policy: "YouTube"
+    policy: "YouTube",
+    cache: {}
 }
 
 let boxConfig = $.read("youtube")
 if (boxConfig != "" && typeof boxConfig != "undefined") {
+    console.log(boxConfig)
     config = JSON.parse(boxConfig)
+    if (config.cache === "undefined") {
+        config.cache = {}
+    }
 }
 
 const needRegion = config.region
 // let params = getParams($argument)
 let youtubeGroup = config.policy
 let otherSubProxies = []
-var oldSubPolicy = ""
-let subPolicyCache = new Map(Object.entries(config.cache === undefined ? {} : config.cache))
-console.log(subPolicyCache)
+
+let subPolicyCache = new Map(Object.entries(config.cache))
+
+console.log(subPolicyCache.size)
 let preSatisfactionProxies = []
 
     ; (async () => {
-        let subProxies = []
-        if (isLoon) {
-            subProxies = $config.getSubPolicys(youtubeGroup)
-        } else if (isSurge) {
-            subProxies = (await httpAPI("/v1/policy_groups"))[youtubeGroup];
-            oldSubPolicy = (await httpAPI("/v1/policy_groups/select?group_name=" + encodeURIComponent(youtubeGroup) + "")).policy;
-        }
-
+        let subProxies = await getSubPolicy(youtubeGroup)
+        let oldSubPolicy = await getNowSelectPolicy(youtubeGroup)
+        preSatisfactionProxies.push(oldSubPolicy)
         let nowIndex = 0
         for (var key in subProxies) {
             if (subProxies[key].name === oldSubPolicy) {
                 nowIndex = key
             }
 
-            if (subPolicyCache.has(subProxies[key].name)) {
-                let name = subProxies[key].name
+            let name = subProxies[key].name
+            if (subPolicyCache.has(name) && !preSatisfactionProxies.includes(name)) {
+
                 console.log("cache sub proxy:[" + name + "]")
                 preSatisfactionProxies.push(name)
             } else {
@@ -88,9 +90,7 @@ function handleCache() {
     let now = (new Date()).valueOf()
 
     for (const [key, value] of subPolicyCache) {
-        console.log(value.region + " " + value.timestamp)
-        console.log(now)
-        if (value.region !== needRegion || now - value.timestamp > 30 * 60 * 60 * 24) {
+        if (!isNeedRegion(region) || now - value.timestamp > 30 * 60 * 60 * 24) {
             subPolicyCache.delete(key)
         }
     }
@@ -103,8 +103,8 @@ async function selectProxy(subProxy) {
     setPolicy(youtubeGroup, subProxy)
     try {
         let region = await Promise.race([test(subProxy), timeout(3000)])
-        console.log(region)
-        if (region === needRegion) {
+
+        if (isNeedRegion(region)) {
             subPolicyCache.set(subProxy, { region: needRegion, timestamp: (new Date()).valueOf() })
             return true
         }
@@ -134,15 +134,20 @@ function test(nodeName) {
                 return
             }
 
-            let region = getRegion(data);
-            console.log(region)
+            let region = getRegion(data)
 
             resolve(region.toUpperCase())
         })
     })
 }
 
-
+function isNeedRegion(region) {
+    if (needRegion.startsWith("!")) {
+        return needRegion.substring(1, needRegion.length) !== region
+    } else {
+        return needRegion === region
+    }
+}
 
 function getRegion(data) {
     let region = "";
@@ -200,4 +205,26 @@ function Cache() {
             }
         }
     }
+}
+
+async function getSubPolicy(policy) {
+    if (isSurge) {
+        return (await httpAPI("/v1/policy_groups"))[policy];
+    } else if (isLoon) {
+        return (new Promise((resolve) => {
+            $config.getSubPolicys(policy, function (str) {
+                resolve(JSON.parse(str))
+            })
+        }))
+    }
+}
+
+
+async function getNowSelectPolicy(policy) {
+    if (isSurge) {
+        return (await httpAPI("/v1/policy_groups/select?group_name=" + encodeURIComponent(policy) + "")).policy
+    } else if (isLoon) {
+        return (new Map(Object.entries(JSON.parse($config.getConfig()).policy_select))).get(policy)
+    }
+
 }
