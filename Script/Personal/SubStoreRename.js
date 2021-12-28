@@ -54,5 +54,5 @@ function operator(proxies) {
     return newProxies.map(proxy => {
         proxy.name = mapCharset(proxy.name)
         return proxy
-    })
+    }).sort()
 }
