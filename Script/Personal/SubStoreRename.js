@@ -25,12 +25,12 @@ function operator(proxies) {
     }
 
     // 需要的地区 key=>匹配正则，value=>重复次数
-    let needRegion = Map()
+    let needRegion = new Map()
     needRegion.set("SG", { reg: /新加坡|SG|狮城/i, replace: 1 })
     needRegion.set("HK", { reg: /香港|HK/i, replace: 1 })
     needRegion.set("JP", { reg: /日本|JP/i, replace: 1 })
     needRegion.set("US", { reg: /美国|US/i, replace: 1 })
-    
+
     let newProxies = []
     for (const proxy of proxies) {
         let name = proxy.name
