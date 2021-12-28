@@ -30,6 +30,8 @@ function operator(proxies) {
     needRegion.set("HK", { reg: /香港|HK/i, replace: 1 })
     needRegion.set("JP", { reg: /日本|JP/i, replace: 1 })
     needRegion.set("US", { reg: /美国|US/i, replace: 1 })
+    needRegion.set("KR", { reg: /韩国|KR/i, replace: 1 })
+    needRegion.set("TW", { reg: /台湾|TW/i, replace: 1 })
 
     let newProxies = []
     for (const proxy of proxies) {
