@@ -38,7 +38,7 @@ function operator(proxies) {
             let reg = value.reg
             let replaceNum = value.replace
             if (reg.test(name)) {
-                let newName = key + fixedNum(replaceNum++, 2)
+                let newName = `${key} ${fixedNum(replaceNum++, 2)}`
                 value.replace = replaceNum
                 needRegion.set(key, value)
                 proxy.name = newName
