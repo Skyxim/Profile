@@ -48,10 +48,11 @@ function operator(proxies) {
         }
     }
 
-    let procedure = $get("Flag Operator", true);
-    newProxies = $process(procedure, newProxies);
+    let procedure = $get("Flag Operator", true)
+    newProxies = $process(procedure, newProxies)
 
     return newProxies.map(proxy => {
         proxy.name = mapCharset(proxy.name)
+        return proxy
     })
 }
