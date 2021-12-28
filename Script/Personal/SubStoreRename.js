@@ -17,10 +17,11 @@ function operator(proxies) {
             if (!charMap.has(char)) {
                 newString.push(char)
             } else {
-                newString.push(charMap.get(oldChar))
+                newString.push(charMap.get(char))
             }
         }
 
+        console.log(newString)
         return newString
     }
 
