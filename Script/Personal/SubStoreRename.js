@@ -21,8 +21,7 @@ function operator(proxies) {
             }
         }
 
-        console.log(newString)
-        return newString
+        return newString.join("")
     }
 
     // 需要的地区 key=>匹配正则，value=>重复次数
