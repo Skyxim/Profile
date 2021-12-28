@@ -49,10 +49,10 @@ function operator(proxies) {
     }
 
     let procedure = $get("Flag Operator", true)
-    newProxies = $process(procedure, newProxies)
+    newProxies = $process(procedure, newProxies.sort())
 
     return newProxies.map(proxy => {
         proxy.name = mapCharset(proxy.name)
         return proxy
-    }).sort()
+    })
 }
