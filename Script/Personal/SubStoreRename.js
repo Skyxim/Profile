@@ -49,7 +49,7 @@ function operator(proxies) {
         }
     }
 
-    procedure = $get("Flag Operator", true);
+    let procedure = $get("Flag Operator", true);
     newProxies = $process(procedure, newProxies);
 
     return newProxies.map(proxy => {
