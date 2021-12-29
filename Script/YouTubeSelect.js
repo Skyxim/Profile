@@ -23,6 +23,7 @@ const needRegion = config.region
 // let params = getParams($argument)
 let youtubeGroup = config.policy
 let otherSubProxies = []
+
 let subPolicyCache = new Map(Object.entries(config.cache))
 
 console.log(subPolicyCache.size)
@@ -56,7 +57,7 @@ let preSatisfactionProxies = []
                 handleCache()
                 $done({
                     title: "YouTube Selected",
-                    content: "当前节点:" + needRegion.toUpperCase() + " :" + proxy
+                    content: "当前节点 " + needRegion.toLocaleUpperCase() + " :" + proxy
                 })
                 return
             }
@@ -68,7 +69,7 @@ let preSatisfactionProxies = []
                 handleCache()
                 $done({
                     title: "YouTube Selected",
-                    content: "当前节点:" + needRegion.toUpperCase() + " :" + proxy
+                    content: "当前节点 " + needRegion.toLocaleUpperCase() + " :" + proxy
                 })
                 return
             }
@@ -80,19 +81,24 @@ let preSatisfactionProxies = []
         handleCache()
         $done({
             title: "YouTube Selected",
-            content: "当前节点:" + oldSubPolicy
+            content: "当前节点：" + oldSubPolicy
         })
 
     })()
 
 function handleCache() {
-    let now = (new Date()).valueOf()
-
+    let now = (new Date()).getTime()
+    let timeout = 7 * 60 * 60 * 24 * 1000
+    let needDelKeys = []
     for (const [key, value] of subPolicyCache) {
-        if (!isNeedRegion(region) || now - value.timestamp > 30 * 60 * 60 * 24) {
-            subPolicyCache.delete(key)
+        if (!isNeedRegion(value.region) || now - value.timestamp > timeout) {
+            needDelKeys.push(key)
         }
     }
+
+    needDelKeys.forEach((key) => {
+        subPolicyCache.delete(key)
+    })
 
     config.cache = Object.fromEntries(subPolicyCache.entries())
     $.write("youtube", JSON.stringify(config))
@@ -102,13 +108,12 @@ async function selectProxy(subProxy) {
     setPolicy(youtubeGroup, subProxy)
     try {
         let region = await Promise.race([test(subProxy), timeout(3000)])
-
         if (isNeedRegion(region)) {
             subPolicyCache.set(subProxy, { region: needRegion, timestamp: (new Date()).valueOf() })
             return true
         }
 
-        console.log("skip->" + subProxy)
+        console.log("skip" + subProxy)
     } catch (error) {
         console.log(error)
     }
@@ -134,7 +139,7 @@ function test(nodeName) {
             }
 
             let region = getRegion(data)
-
+            console.log(region)
             resolve(region.toUpperCase())
         })
     })
@@ -150,10 +155,13 @@ function isNeedRegion(region) {
 
 function getRegion(data) {
     let region = "";
+    console.log(1)
 
     if (data.indexOf('www.google.cn') !== -1 && data.indexOf('Premium is not available in your country') !== -1) {
+        console.log(2)
         region = "CN";
     } else {
+        console.log(3)
         let re = new RegExp('"countryCode":"(.*?)"', "gm");
         let result = re.exec(data);
         if (result != null && result.length === 2) {
