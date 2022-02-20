@@ -1,6 +1,7 @@
 /**
  * ^https:\/\/testflight\.apple\.com\/v2\/accounts\/.+?\/apps\/.+?\/builds\/.+
  * ^https:\/\/testflight\.apple\.com\/v3\/accounts\/.+?\/apps$
+ * ^https:\/\/testflight\.apple\.com\/v2\/accounts\/.+?\/apps\/.+?\/platforms\/ios\/trains\/.+?\/builds
  */
  const url = $request.url
  const responseBody = $response.body
@@ -8,6 +9,7 @@
      ; (async () => {
          const regeList = /.*?\/v3\/accounts\/.+?\/apps$/
          const regeMainPage = /.*?\/v2\/accounts\/.+?\/apps\/.+?\/builds\/.+/
+         const regBiulds = /.*?\/v2\/accounts\/.+?\/apps\/.+?\/platforms\/ios\/trains\/.+?\/builds/
          if (regeList.test(url)) {
              $done({ body: list(responseBody) })
              return
@@ -21,6 +23,11 @@
              }
  
              $done({ body: info(responseBody) })
+             return
+         }
+ 
+         if (regBiulds.test(url)) {
+             $done({ body: builds(responseBody) })
              return
          }
      })()
@@ -78,3 +85,15 @@
      return JSON.stringify(body)
  }
  
+ function builds(responseBody) {
+     let body = JSON.parse(responseBody)
+     if (body.error === null) {
+         for (const build of body.data) {
+             if (build.platform === "ios") {
+                 build.compatible = true
+             }
+         }
+     }
+ 
+     return JSON.stringify(body)
+ }
