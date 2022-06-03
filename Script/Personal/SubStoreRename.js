@@ -51,6 +51,8 @@ function operator(proxies) {
         }
     }
 
+    console.log(newProxies)
+
     newProxies = newProxies.sort((a, b) => {
         return a.name.localeCompare(b.name)
     })
