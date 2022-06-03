@@ -51,7 +51,6 @@ function operator(proxies) {
         }
     }
 
-    console.log(newProxies)
 
     newProxies = newProxies.sort((a, b) => {
         return a.name.localeCompare(b.name)
@@ -59,6 +58,8 @@ function operator(proxies) {
 
     let procedure = $get("Flag Operator", true)
     newProxies = $process(procedure, newProxies)
+
+    console.log(newProxies)
     for (const proxy of newProxies) {
         proxy.name = mapCharset(proxy.name)
     }
