@@ -54,6 +54,8 @@ function operator(proxies) {
         return a.name.localeCompare(b.name)
     })
 
+    let procedure = $get("Flag Operator", true)
+    newProxies = $process(procedure, newProxies)
     for (const proxy of newProxies) {
         proxy.name = mapCharset(proxy.name)
     }
