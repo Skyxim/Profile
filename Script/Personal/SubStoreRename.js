@@ -26,14 +26,13 @@ function operator(proxies) {
 
     // 需要的地区 key=>匹配正则，value=>重复次数
     let needRegion = new Map()
-    needRegion.set("SG", { reg: /新加坡|SG|狮城|🇸🇬/i, replace: 1 })
-    needRegion.set("HK", { reg: /香港|HK|🇭🇰/i, replace: 1 })
-    needRegion.set("JP", { reg: /日本|JP|🇯🇵/i, replace: 1 })
-    needRegion.set("US", { reg: /美国|US|🇺🇸/i, replace: 1 })
-    needRegion.set("KR", { reg: /韩国|KR|🇰🇷/i, replace: 1 })
-    needRegion.set("TW", { reg: /台湾|TW|🇨🇳/i, replace: 1 })
-    const { arg1 } = $arguments
-    console.log(arg1)
+    needRegion.set("🇸🇬SG", { reg: /新加坡|SG|狮城|🇸🇬/i, replace: 1 })
+    needRegion.set("🇭🇰HK", { reg: /香港|HK|🇭🇰/i, replace: 1 })
+    needRegion.set("🇯🇵JP", { reg: /日本|JP|🇯🇵/i, replace: 1 })
+    needRegion.set("🇺🇸US", { reg: /美国|US|🇺🇸/i, replace: 1 })
+    needRegion.set("🇰🇷KR", { reg: /韩国|KR|🇰🇷/i, replace: 1 })
+    needRegion.set("🇨🇳TW", { reg: /台湾|TW|🇨🇳/i, replace: 1 })
+
     let newProxies = []
     for (const proxy of proxies) {
         let name = proxy.name
@@ -56,10 +55,6 @@ function operator(proxies) {
         return a.name.localeCompare(b.name)
     })
 
-    let procedure = $get("Flag Operator", true)
-    newProxies = $process(procedure, newProxies)
-
-    console.log(newProxies)
     for (const proxy of newProxies) {
         proxy.name = mapCharset(proxy.name)
     }
