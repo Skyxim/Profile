@@ -55,9 +55,10 @@ function operator(proxies) {
         return a.name.localeCompare(b.name)
     }))
 
-    return newProxies.map(proxy => {
+    for (const proxy of newProxies) {
         proxy.name = mapCharset(proxy.name)
-        return proxy
-    })
+    }
+
+    return newProxies
 }
 
